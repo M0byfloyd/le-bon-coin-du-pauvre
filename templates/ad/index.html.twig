@@ -4,14 +4,31 @@
 
 {% block body %}
     <div>
-        {% for ad in ads %}
-        <article>
-            <form action="{{ path('lbcdp_ads_vote', { slug:ad.slug }) }}" method="post">
-                <button name="vote" value="up">Up</button>
-                <button name="vote" value="down">Down</button>
-                <p>{{ ad.displayVote }}</p>
-            </form>
-        </article>
-        {% endfor %}
+        <section>
+            <header>
+                <h2>{{ ad.title }}</h2>
+            </header>
+            <main>
+                <p>{{ ad.description }}</p>
+                <span>{{ ad.price }}€</span>
+            </main>
+            <footer>
+                <form action="{{ path('lbcdp_ads_vote', { slug:ad.slug }) }}" method="post">
+                    <button name="vote" value="up">Up</button>
+                    <button name="vote" value="down">Down</button>
+                    <p>{{ ad.displayVote }}</p>
+                </form>
+            </footer>
+        </section>
+        <section>
+            <h3>Questions</h3>
+            {% for question in ad.questions %}
+                <article>
+                    <h4>Question de {{ question.usr.name }} : </h4>
+                    <p>{{ question.text }}</p>
+                    <p>Créé le {{ question.createdAt|date('Y-m-d') }}</p>
+                </article>
+            {% endfor %}
+        </section>
     </div>
 {% endblock %}

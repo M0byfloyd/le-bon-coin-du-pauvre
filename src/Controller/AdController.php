@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Ad;
 use App\Repository\AdRepository;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,10 +18,7 @@ class AdController extends AbstractController
      */
     public function index(AdRepository $adRepository): Response
     {
-        return $this->render('ad/index.html.twig', [
-            'controller_name' => 'AdController',
-            'ads' => $adRepository->findAll()
-        ]);
+        return $this->render('ad/list.html.twig', ['ads' => $adRepository->findAll()]);
     }
 
     /**
@@ -51,8 +47,10 @@ class AdController extends AbstractController
     /**
      * @Route("/ad/{slug}", name="lbcdp_ad_show")
      */
-    public function show(Ad $ad)
+    public function show(Ad $ad): Response
     {
-        dd($ad);
+        return $this->render('ad/index.html.twig',
+            ['ad' => $ad]
+        );
     }
 }
