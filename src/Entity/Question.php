@@ -34,6 +34,11 @@ class Question
      */
     private $usr;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private ?\DateTime $createdAt;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -71,6 +76,18 @@ class Question
     public function setUsr(?User $usr): self
     {
         $this->usr = $usr;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTime
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTime $createdAt): self
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }
