@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AdController!{% endblock %}
+
+{% block body %}
+    {% for ad in ads %}
+    <div>
+        <article>
+            <h2>{{ ad.title }}</h2>
+            <a href="{{ path('lbcdp_ad_show',{slug: ad.slug}) }}">Voir l'annonce</a>
+        </article>
+    </div>
+    {% endfor %}
+{% endblock %}
