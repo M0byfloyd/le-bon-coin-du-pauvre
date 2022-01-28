@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\AdRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -34,9 +36,9 @@ class Ad
     private ?float $price;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Ad::class, inversedBy="tags")
+     * @ORM\ManyToOne(targetEntity=Tag::class, inversedBy="slug")
      */
-    private ?Ad $tags;
+    private ?Tag $tags;
 
     /**
      * @ORM\Column(type="integer")
@@ -48,6 +50,16 @@ class Ad
      * @Gedmo\Slug(fields={"title"})
      */
     private ?string $slug;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Question::class, mappedBy="ad", orphanRemoval=true)
+     */
+    private $questions;
+
+    public function __construct()
+    {
+        $this->questions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -90,12 +102,12 @@ class Ad
         return $this;
     }
 
-    public function getTags(): ?self
+    public function getTags(): Tag
     {
         return $this->tags;
     }
 
-    public function setTags(?self $tags): self
+    public function setTags($tags): self
     {
         $this->tags = $tags;
 
@@ -141,6 +153,36 @@ class Ad
     public function downVote(): self
     {
         $this->votes--;
+        return $this;
+    }
+
+    /**
+     * @return Collection|Question[]
+     */
+    public function getQuestions(): Collection
+    {
+        return $this->questions;
+    }
+
+    public function addQuestion(Question $question): self
+    {
+        if (!$this->questions->contains($question)) {
+            $this->questions[] = $question;
+            $question->setAd($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuestion(Question $question): self
+    {
+        if ($this->questions->removeElement($question)) {
+            // set the owning side to null (unless already changed)
+            if ($question->getAd() === $this) {
+                $question->setAd(null);
+            }
+        }
+
         return $this;
     }
 }
