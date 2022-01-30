@@ -22,11 +22,26 @@
         </section>
         <section>
             <h3>Questions</h3>
+            <hr />
             {% for question in ad.questions %}
                 <article>
                     <h4>Question de {{ question.usr.name }} : </h4>
                     <p>{{ question.text }}</p>
-                    <p>Créé le {{ question.createdAt|date('Y-m-d') }}</p>
+                    <p style="color: grey;">{{ question.createdAt|date('Y-m-d') }}</p>
+                    <section>
+                        <h5>Réponses</h5>
+                        <hr />
+                        {% for answer in question.answers %}
+                        <article>
+                            <h6>{{ answer.author.name }} a répondu :</h6>
+                            <p>{{ answer.text }}</p>
+                            <p style="color: grey;">{{ answer.createdAt|date('Y-m-d') }}</p>
+                        </article>
+                        {% endfor %}
+                        <article>
+
+                        </article>
+                    </section>
                 </article>
             {% endfor %}
         </section>

@@ -2,7 +2,9 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Question;
 use App\Factory\AdFactory;
+use App\Factory\AnswerFactory;
 use App\Factory\QuestionFactory;
 use App\Factory\TagFactory;
 use App\Factory\UserFactory;
@@ -23,6 +25,10 @@ class AppFixtures extends Fixture
 
         QuestionFactory::createMany(56, function () {
             return ['usr' => UserFactory::random(), 'ad'=> AdFactory::random()];
+        });
+
+        AnswerFactory::createMany(200, function () {
+            return ['author'=> UserFactory::random(), 'question' => QuestionFactory::random()];
         });
     }
 }
