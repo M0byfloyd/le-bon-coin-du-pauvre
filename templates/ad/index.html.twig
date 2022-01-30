@@ -12,17 +12,10 @@
                 <p>{{ ad.description }}</p>
                 <span>{{ ad.price }}€</span>
             </main>
-            <footer>
-                <form action="{{ path('lbcdp_ads_vote', { slug:ad.slug }) }}" method="post">
-                    <button name="vote" value="up">Up</button>
-                    <button name="vote" value="down">Down</button>
-                    <p>{{ ad.displayVote }}</p>
-                </form>
-            </footer>
         </section>
         <section>
             <h3>Questions</h3>
-            <hr />
+            <hr/>
             {% for question in ad.questions %}
                 <article>
                     <h4>Question de {{ question.usr.name }} : </h4>
@@ -30,13 +23,13 @@
                     <p style="color: grey;">{{ question.createdAt|date('Y-m-d') }}</p>
                     <section>
                         <h5>Réponses</h5>
-                        <hr />
+                        <hr/>
                         {% for answer in question.answers %}
-                        <article>
-                            <h6>{{ answer.author.name }} a répondu :</h6>
-                            <p>{{ answer.text }}</p>
-                            <p style="color: grey;">{{ answer.createdAt|date('Y-m-d') }}</p>
-                        </article>
+                            <article>
+                                <h6>{{ answer.author.name }} a répondu :</h6>
+                                <p>{{ answer.text }}</p>
+                                <p style="color: grey;">{{ answer.createdAt|date('Y-m-d') }}</p>
+                            </article>
                         {% endfor %}
                         <article>
 

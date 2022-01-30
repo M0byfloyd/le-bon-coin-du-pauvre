@@ -41,6 +41,7 @@ final class UserFactory extends ModelFactory
         return [
             'firstName' => self::faker()->firstName(),
             'lastName' => self::faker()->lastName(),
+            'votes'=> rand(-500,500)
         ];
     }
 
