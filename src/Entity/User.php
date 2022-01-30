@@ -57,6 +57,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $answers;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $votes;
+
     public function __construct()
     {
         $this->questions = new ArrayCollection();
@@ -238,6 +243,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             }
         }
 
+        return $this;
+    }
+
+    public function getVotes(): ?int
+    {
+        return $this->votes;
+    }
+
+    public function setVotes(int $votes): self
+    {
+        $this->votes = $votes;
+
+        return $this;
+    }
+
+    public function displayVote(): string
+    {
+        $prefix = $this->getVotes() > 0 ? '+' : (!$this->getVotes() < 0 ?: '-');
+        return sprintf('%s %d',$prefix, abs($this->getVotes()));
+    }
+
+    public function upVote(): self
+    {
+        $this->votes++;
+        return $this;
+    }
+
+    public function downVote(): self
+    {
+        $this->votes--;
         return $this;
     }
 }

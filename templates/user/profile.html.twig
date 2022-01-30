@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div>
+        <div>
+            <h1>Profile de</h1>
+            <h2>{{ user.name }}</h2>
+        </div>
+        <div class="lbcdp-vote">
+            <button data-id="{{ user.id }}" data-direction="up">Up</button>
+            <button data-id="{{ user.id }}" data-direction="down">Down</button>
+            <p>{{ user.displayVote }}</p>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block bodyscript %}
+    <script>
+        const voteButtons = document.querySelectorAll('.lbcdp-vote button');
+        const total = document.querySelector('.lbcdp-vote p')
+        for (let i = 0; i < voteButtons.length; i++) {
+            voteButtons[i].addEventListener('click', (e) => {
+                const id = e.target.getAttribute('data-id');
+                const direction = e.target.getAttribute('data-direction');
+
+                axios.post(`/user/${id}/vote`, {
+                    direction: direction,
+                }).then((response) => {
+                    total.innerHTML = response.data.votesTotal
+                })
+            })
+        }
+    </script>
+{% endblock %}
