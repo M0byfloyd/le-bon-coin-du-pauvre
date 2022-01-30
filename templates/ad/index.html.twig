@@ -14,6 +14,18 @@
             </main>
         </section>
         <section>
+            {% if is_granted('ROLE_USER') %}
+                <form action="/question/add" method="post">
+                    <label>
+                        <textarea placeholder="Votre question" name="questionText"></textarea>
+                    </label>
+                    <input type="hidden" name="adSlug" value="{{ ad.slug }}">
+                    <input type="submit">
+                </form>
+            {% else %}
+                <p>Merci de vous connecter pour poser une question</p>
+            {% endif %}
+
             <h3>Questions</h3>
             <hr/>
             {% for question in ad.questions %}
@@ -22,8 +34,21 @@
                     <p>{{ question.text }}</p>
                     <p style="color: grey;">{{ question.createdAt|date('Y-m-d') }}</p>
                     <section>
+                        {% if is_granted('ROLE_USER') %}
+                            <form action="/answer/add" method="post">
+                                <label>
+                                    <textarea placeholder="Votre réponse" name="answerText"></textarea>
+                                </label>
+                                <input type="hidden" name="adSlug" value="{{ ad.slug }}">
+                                <input type="hidden" name="questionId" value="{{ question.id }}">
+                                <input type="submit">
+                            </form>
+                        {% else %}
+                            <p>Merci de vous connecter pour répondre</p>
+                        {% endif %}
                         <h5>Réponses</h5>
                         <hr/>
+                        <p>Listes :</p>
                         {% for answer in question.answers %}
                             <article>
                                 <h6>{{ answer.author.name }} a répondu :</h6>
@@ -31,9 +56,6 @@
                                 <p style="color: grey;">{{ answer.createdAt|date('Y-m-d') }}</p>
                             </article>
                         {% endfor %}
-                        <article>
-
-                        </article>
                     </section>
                 </article>
             {% endfor %}
