@@ -29,7 +29,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/inscription", name="user")
+     * @Route("/signin", name="user")
      */
     public function new(Request                     $request,
                         EntityManagerInterface      $entityManager,
@@ -47,7 +47,8 @@ class UserController extends AbstractController
                 $user->setFirstName($requestObj->get('firstName'))
                     ->setLastName($requestObj->get('lastName'))
                     ->setEmail($requestObj->get('email'))
-                    ->setPassword($hasher->hashPassword($user, $requestObj->get('password')));
+                    ->setPassword($hasher->hashPassword($user, $requestObj->get('password')))
+                    ->setVotes(0);
 
                 $entityManager->persist($user);
                 $entityManager->flush();
@@ -83,6 +84,7 @@ class UserController extends AbstractController
      * @Route("/user/{id}/vote", name="lbcdp_ads_vote", methods="POST")
      * @param User $user
      * @param Request $request
+     * @param EntityManagerInterface $entityManager
      * @return Response
      */
     public function vote(User $user, Request $request, EntityManagerInterface $entityManager): Response
