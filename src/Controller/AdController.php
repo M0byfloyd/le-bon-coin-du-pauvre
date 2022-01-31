@@ -114,4 +114,42 @@ class AdController extends AbstractController
         }
         return $this->render('ad/remove.html.twig',['ad'=>$ad]);
     }
+
+    /**
+     * @Route("/ad/modify/{slug}", name="lbcdp_ad_edit")
+     */
+    public function edit(Ad $ad,Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $this->denyAccessUnlessGranted('USER_VIEW', $this->getUser());
+
+        $form = $this->createForm(NewAddType::class, $ad);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /**
+             * @var $ad Ad
+             */
+
+            $ad = $form->getData();
+            $ad->setUser($this->getUser())
+                ->setCreationDate(new \DateTime('now'));
+
+            $entityManager->persist($ad);
+            $entityManager->flush();
+
+            $successMessages = [
+                'De pauvres modifications vous avez fait',
+                'L\'équipe LBCDP ne saurait approuver l\'utilité de ce changement'
+            ];
+
+            $this->addFlash('success', $successMessages[array_rand($successMessages)]);
+
+            return $this->redirectToRoute('lbcdp_ad_show', ['slug'=> $ad->getSlug()]);
+        }
+
+        return $this->render('ad/edit.html.twig', ['newAddForm' => $form->createView()]);
+    }
+
+
 }

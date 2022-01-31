@@ -1,0 +1,10 @@
+<div class="d-flex">
+    <div>
+        <p class="">Tags : </p>
+    </div>
+    <div>
+        {% for tag in ad.tags %}
+            <span class="badge bg-dark text-light fst-italic">#{{ tag.name }}</span>
+        {% endfor %}
+    </div>
+</div>
