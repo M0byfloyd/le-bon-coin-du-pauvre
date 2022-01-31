@@ -18,7 +18,7 @@ class DefaultController extends AbstractController
 
         return $this->render('default/index.html.twig', [
             'controller_name' => 'DefaultController',
-            'ads'=>$adRepository->findAll()
+            'ads'=>$adRepository->findBy([],['votes'=>'DESC'])
         ]);
     }
 
