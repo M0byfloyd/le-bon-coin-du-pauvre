@@ -50,12 +50,20 @@ class AdController extends AbstractController
      */
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted('USER_VIEW', $this->getUser());
+
         $form = $this->createForm(NewAddType::class);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /**
+             * @var $ad Ad
+             */
+
             $ad = $form->getData();
+            $ad->setUser($this->getUser())
+            ->setCreationDate(new \DateTime('now'));
 
             $entityManager->persist($ad);
             $entityManager->flush();
