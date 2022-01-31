@@ -17,12 +17,22 @@
                     <article>
                         <h5 class="card-title">{{ ad.title }}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">Votes : {{ ad.votes }}</h6>
+                        <h6 class="card-subtitle mb-2 text-muted">Prix : {{ ad.price }} € | {{ ad.creationDate | date("m/d/Y") }}</h6>
+                        <p>
+                        <a class="card-subtitle mb-2 text-muted" href="{{ path('lbcdp_showprofile', { 'id': ad.user.id }) }}">{{ ad.user.name }}</a>
+                        </p>
+                        {# <h6 class="card-subtitle mb-2 text-muted">{{ ad.creationDate | date("m/d/Y") }}</h6> #}
+                        
                         <a class="btn btn-secondary" href="{{ path('lbcdp_ad_show',{slug: ad.slug}) }}">Voir
                             l'annonce</a>
+                        
+
                     </article>
                 </div>
             </div>
         </div>
+
+
 
         {% endfor %}
     </div>

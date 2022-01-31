@@ -41,7 +41,8 @@ final class AdFactory extends ModelFactory
             'title' => self::faker()->realText(40),
             'description'=> self::faker()->paragraph(rand(1,4), true),
             'price'=> rand(0,1000),
-            'votes'=> rand(-500,500)
+            'votes'=> rand(-500,500),
+            'creationDate'=> self::faker()->dateTime(),
         ];
     }
 
