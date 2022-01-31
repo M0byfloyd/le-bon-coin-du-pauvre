@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Ad;
+use App\Form\NewAddType;
 use App\Repository\AdRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
@@ -42,6 +43,22 @@ class AdController extends AbstractController
         } catch (OptimisticLockException $e) {
             dd($e);
         }
+    }
+
+    /**
+     * @Route("/ad/new", name="lbcdp_ad_new")
+     */
+    public function new(Request $request): Response
+    {
+        $form = $this->createForm(NewAddType::class);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            dd($form->getData());
+        }
+
+        return $this->render('ad/new.html.twig', ['newAddForm' => $form->createView()]);
     }
 
     /**
