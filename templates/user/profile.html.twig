@@ -26,7 +26,7 @@
                 const direction = e.target.getAttribute('data-direction');
 
                 axios.post(`/user/${id}/vote`, {
-                    direction: direction,
+                    voteDirection: direction
                 }).then((response) => {
                     total.innerHTML = response.data.votesTotal
                 })
