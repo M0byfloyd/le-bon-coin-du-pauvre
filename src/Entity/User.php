@@ -62,10 +62,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $votes;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Ad::class, mappedBy="user", orphanRemoval=true)
+     */
+    private $ads;
+
     public function __construct()
     {
         $this->questions = new ArrayCollection();
         $this->answers = new ArrayCollection();
+        $this->ads = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -273,6 +279,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function downVote(): self
     {
         $this->votes--;
+        return $this;
+    }
+
+    /**
+     * @return Collection|Ad[]
+     */
+    public function getAds(): Collection
+    {
+        return $this->ads;
+    }
+
+    public function addAd(Ad $ad): self
+    {
+        if (!$this->ads->contains($ad)) {
+            $this->ads[] = $ad;
+            $ad->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAd(Ad $ad): self
+    {
+        if ($this->ads->removeElement($ad)) {
+            // set the owning side to null (unless already changed)
+            if ($ad->getUser() === $this) {
+                $ad->setUser(null);
+            }
+        }
+
         return $this;
     }
 }

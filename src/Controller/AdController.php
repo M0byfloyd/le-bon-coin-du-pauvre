@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Ad;
+use App\Form\NewAddType;
 use App\Repository\AdRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
@@ -30,7 +31,7 @@ class AdController extends AbstractController
      */
     public function vote(Ad $ad, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $vote = $request->request->get('vote') ;
+        $vote = $request->request->get('vote');
         $vote === 'up' ? $ad->upVote() : $ad->downVote();
         try {
             $entityManager->flush();
@@ -42,6 +43,29 @@ class AdController extends AbstractController
         } catch (OptimisticLockException $e) {
             dd($e);
         }
+    }
+
+    /**
+     * @Route("/ad/new", name="lbcdp_ad_new")
+     */
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(NewAddType::class);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $ad = $form->getData();
+
+            $entityManager->persist($ad);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Bravo, belle annonce de pauvre.');
+
+            return $this->redirectToRoute('lbcdp_ad_show', ['slug'=> $ad->getSlug()]);
+        }
+
+        return $this->render('ad/new.html.twig', ['newAddForm' => $form->createView()]);
     }
 
     /**
