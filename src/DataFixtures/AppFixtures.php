@@ -20,7 +20,7 @@ class AppFixtures extends Fixture
         TagFactory::createMany(10);
 
         AdFactory::createMany(20, function () {
-            return ['tags'=>TagFactory::random()];
+            return ['tags'=>TagFactory::random(),'user'=>UserFactory::random()];
         });
 
         QuestionFactory::createMany(56, function () {

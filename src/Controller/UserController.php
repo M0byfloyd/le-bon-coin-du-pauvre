@@ -73,7 +73,7 @@ class UserController extends AbstractController
     /**
      * @param User $user
      * @return Response
-     * @Route ("/user/{id}")
+     * @Route ("/user/{id}", name="lbcdp_showprofile")
      */
     public function showProfile(User $user): Response
     {
