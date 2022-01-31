@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<div>
+    <p>Voulez-vous réellement supprimer votre pauvre annonce <span>"{{ ad.title }}"</span> ? </p>
+    <form method="POST">
+        <button type="submit" name="choice" value="y" >Bien-sûr tu me prends pour quoi ?</button>
+        <button type="submit" name="choice" value="n" >OULALALAH MAIS QU'EST-CE QUE JE FOUS LA</button>
+    </form>
+</div>
+
+{% endblock %}

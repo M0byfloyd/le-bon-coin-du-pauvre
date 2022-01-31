@@ -50,17 +50,33 @@ class AdController extends AbstractController
      */
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted('USER_VIEW', $this->getUser());
+
         $form = $this->createForm(NewAddType::class);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /**
+             * @var $ad Ad
+             */
+
             $ad = $form->getData();
+            $ad->setUser($this->getUser())
+            ->setCreationDate(new \DateTime('now'));
 
             $entityManager->persist($ad);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Bravo, belle annonce de pauvre.');
+            $successMessages = [
+                'Faut être sacrément pauvre pour faire une annonce comme ça',
+                'Félicitation LBCDP vous confirme que vous êtes pauvre',
+                'Une annonce pauvre en contenu, comme on les aime !',
+                'Vous vous êtes surpassé dans la pauvreté',
+                'Vous êtes sûr que cette annonce sera vraiment utile ?'
+            ];
+
+            $this->addFlash('success', $successMessages[array_rand($successMessages)]);
 
             return $this->redirectToRoute('lbcdp_ad_show', ['slug'=> $ad->getSlug()]);
         }
@@ -74,7 +90,28 @@ class AdController extends AbstractController
     public function show(Ad $ad): Response
     {
         return $this->render('ad/index.html.twig',
-            ['ad' => $ad]
+            ['ad' => $ad, 'isAuthor'=> $ad->getUser() === $this->getUser()]
         );
+    }
+
+    /**
+     * @Route("/ad/remove/{slug}", name="lbcdp_ad_remove")
+     */
+    public function remove(Ad $ad, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $this->denyAccessUnlessGranted('USER_EDIT',$ad->getUser());
+
+        if ($request->isMethod('POST')) {
+            if ($request->request->get('choice') === 'n') {
+                return $this->redirectToRoute('lbcdp_ad_show', ['slug'=> $ad->getSlug()]);
+            }
+            $entityManager->remove($ad);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'L\'annonce a été giga supprimée');
+
+            return $this->redirectToRoute('lbcdp_homepage');
+        }
+        return $this->render('ad/remove.html.twig',['ad'=>$ad]);
     }
 }
