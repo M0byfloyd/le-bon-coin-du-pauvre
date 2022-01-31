@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+{{ form_start(newAddForm) }}
+{{ form_widget(newAddForm) }}
+<button type="submit">
+    Modifiez votre annonce du pauvre
+</button>
+{{ form_end(newAddForm) }}
+{% endblock %}

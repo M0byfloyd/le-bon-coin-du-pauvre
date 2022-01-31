@@ -36,11 +36,6 @@ class Ad
     private ?float $price;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Tag::class, inversedBy="slug")
-     */
-    private ?Tag $tags;
-
-    /**
      * @ORM\Column(type="integer")
      */
     private int $votes = 0;
@@ -67,9 +62,15 @@ class Ad
      */
     private $creationDate;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="ads")
+     */
+    private $Tags;
+
     public function __construct()
     {
         $this->questions = new ArrayCollection();
+        $this->Tags = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -109,18 +110,6 @@ class Ad
     public function setPrice(?float $price): self
     {
         $this->price = $price;
-
-        return $this;
-    }
-
-    public function getTags(): Tag
-    {
-        return $this->tags;
-    }
-
-    public function setTags($tags): self
-    {
-        $this->tags = $tags;
 
         return $this;
     }
@@ -217,6 +206,30 @@ class Ad
     public function setCreationDate(\DateTimeInterface $creationDate): self
     {
         $this->creationDate = $creationDate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Tag[]
+     */
+    public function getTags(): Collection
+    {
+        return $this->Tags;
+    }
+
+    public function addTag(Tag $tag): self
+    {
+        if (!$this->Tags->contains($tag)) {
+            $this->Tags[] = $tag;
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): self
+    {
+        $this->Tags->removeElement($tag);
 
         return $this;
     }

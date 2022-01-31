@@ -29,7 +29,7 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/signin", name="user")
+     * @Route("/signin", name="lbcdp_signin")
      */
     public function new(Request                     $request,
                         EntityManagerInterface      $entityManager,

@@ -9,11 +9,14 @@
                 <div class="card-body">
                     {% if isAuthor %}
                         <div class="text-end">
-                            <a>Modifier</a>
+                            <a href="{{ path('lbcdp_ad_edit',{'slug':ad.slug}) }}">Modifier</a>
                             <a href="{{ path('lbcdp_ad_remove',{'slug':ad.slug}) }}">Supprimer</a>
                         </div>
                     {% endif %}
                     <h3 class="card-title font-weight-bold">{{ ad.title }}</h3>
+
+                    {{ include('tag/show-all.html.twig', {'ad': ad}) }}
+
                     <h6 class="card-subtitle mb-2 text-muted">De : {{ ad.user.name }}</h6>
                     <h6 class="card-subtitle mb-2 text-muted">{{ ad.price }}€
                         | {{ ad.creationDate | date("m/d/Y") }}</h6>
