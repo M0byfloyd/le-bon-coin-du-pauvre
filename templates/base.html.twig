@@ -23,10 +23,15 @@
     <![endif]-->
 </head>
 <body>
-<div class="navbar">
-    <div class=""></div>
-    {{ include('search/searchbar.html.twig') }}
-</div>
+<nav class="navbar">
+    <ul class="w-100 d-flex justify-content-around list-unstyled align-items-center">
+        <li class="nav-item"><a class="nav-link text-muted" href="/">Accueil</a></li>
+        <li class="nav-item"><a class="nav-link text-muted" href="/ads">Annonces</a></li>
+        <li class="nav-item w-25">{{ include('search/searchbar.html.twig') }}</li>
+        <li class="nav-item"><a class="nav-link text-muted" href="/login">Se connecter</a></li>
+    </ul>
+
+</nav>
 {% block body %}{% endblock %}
 
 <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous"></script>
