@@ -1,0 +1,8 @@
+{% block body %}
+    <div class="mx-auto my-4 w-25">
+        <form class="d-flex align-items-center" action="{{ path('search-ad') }}">
+            <i class="bi bi-search me-2"></i>
+            <input type="search" class="form-control" name="s" value="{{ app.request.query.get('s') | default('') }}" placeholder="Rechercher une annonce de pauvre..." aria-label="Search">
+        </form>
+    </div>
+{% endblock %}
