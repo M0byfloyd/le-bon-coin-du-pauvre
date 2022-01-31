@@ -4,7 +4,9 @@
             <div class="card-body">
                 <article>
                     <h5 class="card-title">{{ ad.title }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ ad.user.name }}</h6>
                     <h6 class="card-subtitle mb-2 text-muted">Votes : {{ ad.votes }}</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">Prix : {{ ad.price }} € | {{ ad.creationDate | date("m/d/Y")  }}</h6>
                     <a class="btn btn-secondary" href="{{ path('lbcdp_ad_show',{slug: ad.slug}) }}">
                         Voir l'annonce
                     </a>
