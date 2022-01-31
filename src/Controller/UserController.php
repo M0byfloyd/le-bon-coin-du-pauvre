@@ -73,7 +73,7 @@ class UserController extends AbstractController
     /**
      * @param User $user
      * @return Response
-     * @Route ("/user/{id}", name="lbcdp_showprofile")
+     * @Route ("/user/{email}", name="lbcdp_showprofile")
      */
     public function showProfile(User $user): Response
     {
@@ -89,7 +89,9 @@ class UserController extends AbstractController
      */
     public function vote(User $user, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $voteDirection = $request->request->get('direction');
+        $parameters = json_decode($request->getContent(), true);
+        $voteDirection = $parameters['voteDirection'];
+
         $voteDirection === 'up' ? $user->upVote() : $user->downVote();
 
         $entityManager->flush();

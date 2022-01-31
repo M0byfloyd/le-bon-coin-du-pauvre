@@ -30,7 +30,7 @@ class AdController extends AbstractController
      */
     public function vote(Ad $ad, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $vote = $request->request->get('vote');
+        $vote = $request->request->get('vote') ;
         $vote === 'up' ? $ad->upVote() : $ad->downVote();
         try {
             $entityManager->flush();
