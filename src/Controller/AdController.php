@@ -82,7 +82,16 @@ class AdController extends AbstractController
     public function show(Ad $ad): Response
     {
         return $this->render('ad/index.html.twig',
-            ['ad' => $ad]
+            ['ad' => $ad, 'isAuthor'=> $ad->getUser() === $this->getUser()]
         );
+    }
+
+    /**
+     * @Route("/ad/remove/{slug}", name="lbcdp_ad_remove")
+     */
+    public function remove(Ad $ad): Response
+    {
+        $this->denyAccessUnlessGranted('USER_EDIT',$ad->getUser());
+        return $this->render('ad/remove.html.twig',['ad'=>$ad]);
     }
 }

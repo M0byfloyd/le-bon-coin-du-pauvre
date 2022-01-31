@@ -21,7 +21,7 @@ class UserVoter extends Voter
     {
         // replace with your own logic
         // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, ['USER_EDIT', 'USER_VIEW', 'USER_DELETE'])
+        return in_array($attribute, ['USER_EDIT', 'USER_VIEW', 'USER_DELETE','USER_CAN_EDIT'])
             && $subject instanceof User;
     }
 
@@ -34,7 +34,7 @@ class UserVoter extends Voter
         }
 
         switch ($attribute) {
-
+            case 'USER_EDIT':
             case 'USER_VIEW':
                 if ($user === $subject) {
                     return true;

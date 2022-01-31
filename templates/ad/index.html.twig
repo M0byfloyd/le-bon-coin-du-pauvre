@@ -3,70 +3,76 @@
 {% block title %}Hello AdController!{% endblock %}
 
 {% block body %}
-<div class="container">
-    <div class="row">
-        <div class="card col-xs-12">
-            <div class="card-body">
-                <h3 class="card-title font-weight-bold">{{ ad.title }}</h3>
-                <h6 class="card-subtitle mb-2 text-muted">De : {{ ad.user.name }}</h6>
-                <h6 class="card-subtitle mb-2 text-muted">{{ ad.price }}€ | {{ ad.creationDate | date("m/d/Y")  }}</h6>
-                <p class="card-text">{{ ad.description }}</p>
-                <hr />
-                {% if is_granted('ROLE_USER') %}
-                <form action="/question/add" method="post">
-                        <textarea placeholder="Votre question" name="questionText" style="width: 100%;"></textarea>
-                    <input type="hidden" name="adSlug" value="{{ ad.slug }}">
-                    <br/>
-
-                    <input type="submit">
-                </form>
-                {% else %}
-                <p>Merci de vous connecter pour poser une question</p>
-                {% endif %}
-                <hr />
-                <h4>Questions</h4>
-                <hr />
-                {% for question in ad.questions %}
-                <article class="card" style="padding: 30px 20px;margin-bottom:30px;">
-                    <h4>Question de {{ question.usr.name }} : </h4>
-                    <p>{{ question.text }}</p>
-                    <p style="color: grey;">Postée le : {{ question.createdAt|date('Y-m-d') }}</p>
-                    <section>
-                        {% if is_granted('ROLE_USER') %}
-                        <form action="/answer/add" method="post">
-                                <textarea placeholder="Votre réponse" name="answerText" style="width: 100%;"></textarea>
+    <div class="container">
+        <div class="row">
+            <div class="card col-xs-12">
+                <div class="card-body">
+                    {% if isAuthor %}
+                        <div class="text-end">
+                            <a>Modifier</a>
+                            <a href="{{ path('lbcdp_ad_remove',{'slug':ad.slug}) }}">Supprimer</a>
+                        </div>
+                    {% endif %}
+                    <h3 class="card-title font-weight-bold">{{ ad.title }}</h3>
+                    <h6 class="card-subtitle mb-2 text-muted">De : {{ ad.user.name }}</h6>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ ad.price }}€
+                        | {{ ad.creationDate | date("m/d/Y") }}</h6>
+                    <p class="card-text">{{ ad.description }}</p>
+                    <hr/>
+                    {% if is_granted('ROLE_USER') %}
+                        <form action="/question/add" method="post">
+                            <textarea placeholder="Votre question" name="questionText" style="width: 100%;"></textarea>
                             <input type="hidden" name="adSlug" value="{{ ad.slug }}">
-                            <input type="hidden" name="questionId" value="{{ question.id }}">
                             <br/>
+
                             <input type="submit">
                         </form>
-                        {% else %}
-                        <p>Merci de vous connecter pour répondre</p>
-                        {% endif %}
-                        <h5>Réponses</h5>
-                        <hr />
-                        <p>Listes des réponses :</p>
-                        {% for answer in question.answers %}
-                        <article>
-                            <h6>{{ answer.author.name }} a répondu :</h6>
-                            <p>{{ answer.text }}</p>
-                            <p style="color: grey;">Postée le : {{ answer.createdAt|date('Y-m-d') }}</p>
+                    {% else %}
+                        <p>Merci de vous connecter pour poser une question</p>
+                    {% endif %}
+                    <hr/>
+                    <h4>Questions</h4>
+                    <hr/>
+                    {% for question in ad.questions %}
+                        <article class="card" style="padding: 30px 20px;margin-bottom:30px;">
+                            <h4>Question de {{ question.usr.name }} : </h4>
+                            <p>{{ question.text }}</p>
+                            <p style="color: grey;">Postée le : {{ question.createdAt|date('Y-m-d') }}</p>
+                            <section>
+                                {% if is_granted('ROLE_USER') %}
+                                    <form action="/answer/add" method="post">
+                                        <textarea placeholder="Votre réponse" name="answerText"
+                                                  style="width: 100%;"></textarea>
+                                        <input type="hidden" name="adSlug" value="{{ ad.slug }}">
+                                        <input type="hidden" name="questionId" value="{{ question.id }}">
+                                        <br/>
+                                        <input type="submit">
+                                    </form>
+                                {% else %}
+                                    <p>Merci de vous connecter pour répondre</p>
+                                {% endif %}
+                                <h5>Réponses</h5>
+                                <hr/>
+                                <p>Listes des réponses :</p>
+                                {% for answer in question.answers %}
+                                    <article>
+                                        <h6>{{ answer.author.name }} a répondu :</h6>
+                                        <p>{{ answer.text }}</p>
+                                        <p style="color: grey;">Postée le : {{ answer.createdAt|date('Y-m-d') }}</p>
+                                    </article>
+                                    <hr class="text-center" style="width: 50%;"/>
+                                {% endfor %}
+                            </section>
                         </article>
-                        <hr class="text-center" style="width: 50%;" />
-                        {% endfor %}
-                    </section>
-                </article>
-                {% endfor %}
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div>
-    <section>
+    <div>
+        <section>
 
 
-
-
-    </section>
-</div>
+        </section>
+    </div>
 {% endblock %}
