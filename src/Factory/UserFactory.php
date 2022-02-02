@@ -4,6 +4,9 @@ namespace App\Factory;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Service\UploadHelper;
+use Doctrine\Migrations\Configuration\Exception\FileNotFound;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Zenstruck\Foundry\RepositoryProxy;
 use Zenstruck\Foundry\ModelFactory;
@@ -29,11 +32,25 @@ use Zenstruck\Foundry\Proxy;
  */
 final class UserFactory extends ModelFactory
 {
+    private static $randomImage =[
+        'profile_0.png',
+        'profile_1.jpg',
+        'profile_2.jpg',
+        'profile_3.jpg',
+        'profile_4.jpg',
+        'profile_5.jpg',
+        'profile_6.jpg',
+        'profile_7.jpg',
+        'profile_8.jpg',
+    ];
     private $hasher;
-    public function __construct(UserPasswordHasherInterface $hasher)
+    private $uploadhelper;
+
+    public function __construct(UserPasswordHasherInterface $hasher, UploadHelper $uploadHelper)
     {
         parent::__construct();
         $this->hasher = $hasher;
+        $this->uploadHelper = $uploadHelper;
     }
 
     protected function getDefaults(): array
@@ -41,7 +58,10 @@ final class UserFactory extends ModelFactory
         return [
             'firstName' => self::faker()->firstName(),
             'lastName' => self::faker()->lastName(),
-            'votes'=> rand(-500,500)
+            'votes'=> rand(-500,500),
+            'profilePicture'=> $this->uploadHelper->fixtureUpload(
+                new File(__DIR__ . '/images/user/' . self::faker()->randomElement(self::$randomImage)), 'user'
+            )
         ];
     }
 

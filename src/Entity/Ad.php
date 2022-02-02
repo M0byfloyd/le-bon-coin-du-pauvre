@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\AdRepository;
+use App\Service\UploadHelper;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -66,6 +67,11 @@ class Ad
      * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="ads")
      */
     private $Tags;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $images;
 
     public function __construct()
     {
@@ -232,5 +238,22 @@ class Ad
         $this->Tags->removeElement($tag);
 
         return $this;
+    }
+
+    public function getImages(): ?string
+    {
+        return $this->images;
+    }
+
+    public function setImages(?string $images): self
+    {
+        $this->images = $images;
+
+        return $this;
+    }
+
+    public function getImagePath(): string
+    {
+        return $this->getImages() === null ? UploadHelper::DEFAULT_IMAGE : UploadHelper::BASE_PATH . '/ad/' . $this->getImages();
     }
 }

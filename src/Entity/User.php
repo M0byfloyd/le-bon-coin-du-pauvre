@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use App\Service\UploadHelper;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -66,6 +67,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\OneToMany(targetEntity=Ad::class, mappedBy="user", orphanRemoval=true)
      */
     private $ads;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $profilePicture;
 
     public function __construct()
     {
@@ -266,7 +272,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function displayVote(): string
     {
-        $prefix = $this->getVotes() > 0 ? '+' : (!$this->getVotes() < 0 ?: '-');
+        $prefix = $this->getVotes() > 0 ? '+' : ($this->getVotes() === 0 ? '' : (!$this->getVotes() < 0 ?: '-'));
         return sprintf('%s %d',$prefix, abs($this->getVotes()));
     }
 
@@ -310,5 +316,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    public function getProfilePicture(): ?string
+    {
+        return $this->profilePicture;
+    }
+
+    public function setProfilePicture(?string $profilePicture): self
+    {
+        $this->profilePicture = $profilePicture;
+
+        return $this;
+    }
+
+    public function getImagePath(): string
+    {
+        return $this->getProfilePicture() === null ? UploadHelper::DEFAULT_IMAGE : UploadHelper::BASE_PATH . 'user/' . $this->getProfilePicture();
     }
 }

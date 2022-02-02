@@ -9,3 +9,10 @@
 /vendor/
 ###< symfony/framework-bundle ###
 .idea/deployment.xml
+
+###> liip/imagine-bundle ###
+/public/media/cache/
+###< liip/imagine-bundle ###
+!/public/media/cache/medium/uploads/user/
+!/public/uploads/ad/
+!/public/uploads/user/

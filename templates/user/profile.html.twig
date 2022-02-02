@@ -3,8 +3,11 @@
 {% block body %}
     <div>
         <div>
-            <h1>Profile de</h1>
+            <h1>Profil de</h1>
             <h2>{{ user.name }}</h2>
+        </div>
+        <div>
+            <img src="{{ asset(user.imagePath) | imagine_filter('medium') }}" alt="Avatar">
         </div>
         <div class="lbcdp-vote">
             <button data-id="{{ user.id }}" data-direction="up">Up</button>
