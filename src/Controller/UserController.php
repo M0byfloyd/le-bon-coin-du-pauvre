@@ -60,14 +60,18 @@ class UserController extends AbstractController
     }
 
     /**
-     * @param User $user
      * @return Response
-     * @Route("/show/{email}",name="lbcdp_show")
+     * @Route("/me",name="lbcdp_user_me")
      */
-    public function show(User $user): Response
+    public function me(): Response
     {
-        $this->denyAccessUnlessGranted('USER_VIEW', $user);
-        return $this->render('user/show.html.twig', ['user' => $user]);
+        $user = $this->getUser();
+
+        if ($user) {
+            return $this->render('user/show.html.twig', ['user' => $user]);
+        }
+
+        return $this->redirectToRoute('lbcdp_homepage');
     }
 
     /**

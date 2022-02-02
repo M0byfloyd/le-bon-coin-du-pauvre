@@ -1,5 +1,34 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {{ dump(user) }}
+    <div class="row">
+        <div class="col-3">
+            <h1>Votre profil</h1>
+
+            <img src="{{ asset(user.imagePath) | imagine_filter('medium') }}" alt="Avatar">
+            <p>Nom : {{ user.lastname }}</p>
+            <p>Prénom : {{ user.firstname }}</p>
+            <p>Votre réputation : {{ user.displayVote }}</p>
+        </div>
+        <div class="col-9">
+        </div>
+    </div>
+    <div class="row">
+        <h2>
+            Vos dernières annonces
+        </h2>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <h2>
+                Vos dernières questions
+            </h2>
+        </div>
+        <div class="col-6">
+            <h2>
+                Vos dernières réponse
+            </h2>
+        </div>
+    </div>
+
 {% endblock %}

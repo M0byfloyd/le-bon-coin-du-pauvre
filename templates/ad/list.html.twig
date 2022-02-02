@@ -4,13 +4,17 @@
 
 {% block body %}
 
-<div class="container">
-    <div class="row">
-        <h1 class="col-xs-12">Liste des annonces</h1>
+    <div class="container">
+        <div class="row">
+            {% if app.user %}
+                <a href="{{ path('lbcdp_ad_new') }}" class="btn btn-primary">Créer votre annonce</a>
+            {% endif %}
 
-        {% for ad in ads %}
-            {{ include('ad/single.html.twig', {'ad': ad}) }}
-        {% endfor %}
+            <h1 class="col-xs-12">Liste des annonces</h1>
+
+            {% for ad in ads %}
+                {{ include('ad/single.html.twig', {'ad': ad}) }}
+            {% endfor %}
+        </div>
     </div>
-</div>
 {% endblock %}

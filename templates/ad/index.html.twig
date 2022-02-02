@@ -15,6 +15,7 @@
                     {% endif %}
                     <h3 class="card-title font-weight-bold">{{ ad.title }}</h3>
 
+                    <img src="{{ asset(ad.imagePath) | imagine_filter('medium') }}" alt="">
                     {{ include('tag/show-all.html.twig', {'ad': ad}) }}
 
                     <h6 class="card-subtitle mb-2 text-muted">De : {{ ad.user.name }}</h6>

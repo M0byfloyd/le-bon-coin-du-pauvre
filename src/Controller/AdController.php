@@ -5,9 +5,12 @@ namespace App\Controller;
 use App\Entity\Ad;
 use App\Form\NewAddType;
 use App\Repository\AdRepository;
+use App\Service\UploadHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
+use Gedmo\Sluggable\Util\Urlizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -118,7 +121,7 @@ class AdController extends AbstractController
     /**
      * @Route("/ad/modify/{slug}", name="lbcdp_ad_edit")
      */
-    public function edit(Ad $ad,Request $request, EntityManagerInterface $entityManager): Response
+    public function edit(Ad $ad,Request $request, EntityManagerInterface $entityManager, UploadHelper $uploadHelper): Response
     {
         $this->denyAccessUnlessGranted('USER_VIEW', $this->getUser());
 
@@ -135,6 +138,13 @@ class AdController extends AbstractController
             $ad->setUser($this->getUser())
                 ->setCreationDate(new \DateTime('now'));
 
+            $newFile = $form['images']->getData();
+
+            if ($newFile) {
+                $fileName = $uploadHelper->uploadImg($newFile, 'ad');
+                $ad->setImages($fileName);
+            }
+
             $entityManager->persist($ad);
             $entityManager->flush();
 
@@ -150,6 +160,4 @@ class AdController extends AbstractController
 
         return $this->render('ad/edit.html.twig', ['newAddForm' => $form->createView()]);
     }
-
-
 }
