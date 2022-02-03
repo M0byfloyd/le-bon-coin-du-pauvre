@@ -30,16 +30,6 @@ use Zenstruck\Foundry\Proxy;
  */
 final class AdFactory extends ModelFactory
 {
-    private static $randomImage =[
-        'ad_0.jpg',
-        'ad_1.jpg',
-        'ad_2.png',
-        'ad_3.jpg',
-        'ad_4.jpg',
-        'ad_5.jpg',
-        'ad_6.jpg',
-    ];
-
     private UploadHelper $uploadHelper;
 
     public function __construct(UploadHelper $uploadHelper)
@@ -51,6 +41,8 @@ final class AdFactory extends ModelFactory
 
     protected function getDefaults(): array
     {
+        $randomImage = array_diff(scandir(__DIR__ . '/images/ad/'), array('.','..'));
+
         return [
             'title' => self::faker()->realText(40),
             'description'=> self::faker()->paragraph(rand(1,4), true),
@@ -58,7 +50,7 @@ final class AdFactory extends ModelFactory
             'votes'=> rand(-500,500),
             'creationDate'=> self::faker()->dateTime(),
             'images'=> $this->uploadHelper->fixtureUpload(
-                new File(__DIR__ . '/images/ad/' . self::faker()->randomElement(self::$randomImage)), 'ad'
+                new File(__DIR__ . '/images/ad/' . self::faker()->randomElement($randomImage)), 'ad'
             )
         ];
     }

@@ -32,17 +32,8 @@ use Zenstruck\Foundry\Proxy;
  */
 final class UserFactory extends ModelFactory
 {
-    private static $randomImage =[
-        'profile_0.png',
-        'profile_1.jpg',
-        'profile_2.jpg',
-        'profile_3.jpg',
-        'profile_4.jpg',
-        'profile_5.jpg',
-        'profile_6.jpg',
-        'profile_7.jpg',
-        'profile_8.jpg',
-    ];
+
+
     private $hasher;
     private UploadHelper $uploadHelper;
 
@@ -55,12 +46,14 @@ final class UserFactory extends ModelFactory
 
     protected function getDefaults(): array
     {
+        $randomImage = array_diff(scandir(__DIR__ . '/images/user/'), array('.','..'));
+
         return [
             'firstName' => self::faker()->firstName(),
             'lastName' => self::faker()->lastName(),
             'votes'=> rand(-500,500),
             'profilePicture'=> $this->uploadHelper->fixtureUpload(
-                new File(__DIR__ . '/images/user/' . self::faker()->randomElement(self::$randomImage)), 'user'
+                new File(__DIR__ . '/images/user/' . self::faker()->randomElement($randomImage)), 'user'
             )
         ];
     }
