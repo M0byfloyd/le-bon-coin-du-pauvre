@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class UploadHelper
 {
     const DEFAULT_IMAGE = 'assets/images/default.png';
+    const DEFAULT_PROFILE_IMAGE = 'assets/images/default_profile.jpg';
+
     const BASE_PATH = 'uploads/';
     private string $publicPath;
 
@@ -42,9 +44,4 @@ class UploadHelper
 
         return $filename;
     }
-
-    public function getUploadPath($entity = '') {
-        return self::BASE_PATH . $entity;
-    }
-
 }

@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\UserType;
 use App\Repository\UserRepository;
 use App\Security\Authenticator;
+use App\Service\UploadHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,28 +37,37 @@ class UserController extends AbstractController
                         EntityManagerInterface      $entityManager,
                         UserPasswordHasherInterface $hasher,
                         UserAuthenticatorInterface  $authenticator,
-                        Authenticator               $loginFormAuthenticator): Response
+                        Authenticator               $loginFormAuthenticator,
+                        UploadHelper                $uploadHelper
+    ): Response
     {
-        if ($request->isMethod('POST')) {
-            $requestObj = $request->request;
-            if (!empty($requestObj->get('password'))
-                && !empty($requestObj->get('passwordVerify'))
-                && $request->request->get('password') === $requestObj->get('passwordVerify')
-                && $this->isCsrfTokenValid('register_form', $requestObj->get('csrf'))) {
-                $user = new User();
-                $user->setFirstName($requestObj->get('firstName'))
-                    ->setLastName($requestObj->get('lastName'))
-                    ->setEmail($requestObj->get('email'))
-                    ->setPassword($hasher->hashPassword($user, $requestObj->get('password')))
-                    ->setVotes(0);
+        $form = $this->createForm(UserType::class);
 
-                $entityManager->persist($user);
-                $entityManager->flush();
+        $form->handleRequest($request);
 
-                return $authenticator->authenticateUser($user, $loginFormAuthenticator, $request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /**
+             * @var $user User
+             */
+
+            $user = $form->getData();
+
+            $user->setPassword($hasher->hashPassword($user,$form['password']->getData()));
+
+            $newFile = $form['profilePicture']->getData();
+
+            if ($newFile) {
+                $fileName = $uploadHelper->uploadImg($newFile, 'user');
+                $user->setProfilePicture($fileName);
             }
+            $user->setVotes(0);
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            return $authenticator->authenticateUser($user, $loginFormAuthenticator, $request);
         }
-        return $this->render('user/new.html.twig');
+        return $this->render('user/new.html.twig', ['userForm' => $form->createView()]);
     }
 
     /**
