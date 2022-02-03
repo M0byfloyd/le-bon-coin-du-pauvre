@@ -51,7 +51,7 @@ class AdController extends AbstractController
     /**
      * @Route("/ad/new", name="lbcdp_ad_new")
      */
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, UploadHelper $uploadHelper): Response
     {
         $this->denyAccessUnlessGranted('USER_VIEW', $this->getUser());
 
@@ -67,6 +67,13 @@ class AdController extends AbstractController
             $ad = $form->getData();
             $ad->setUser($this->getUser())
             ->setCreationDate(new \DateTime('now'));
+
+            $newFile = $form['images']->getData();
+
+            if ($newFile) {
+                $fileName = $uploadHelper->uploadImg($newFile, 'ad');
+                $ad->setImages($fileName);
+            }
 
             $entityManager->persist($ad);
             $entityManager->flush();
