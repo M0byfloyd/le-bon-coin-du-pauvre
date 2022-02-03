@@ -1,85 +1,96 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AdController!{% endblock %}
+{% block title %}Annonces{% endblock %}
 
 {% block body %}
-    <div class="container">
-        <div class="row">
-            <div class="card col-xs-12">
-                <div class="card-body">
-                    {% if isAuthor %}
-                        <div class="text-end">
-                            <a href="{{ path('lbcdp_ad_edit',{'slug':ad.slug}) }}">Modifier</a>
-                            <a href="{{ path('lbcdp_ad_remove',{'slug':ad.slug}) }}">Supprimer</a>
-                        </div>
-                    {% endif %}
-                    <h3 class="card-title font-weight-bold">{{ ad.title }}</h3>
-
-                    <img src="{{ asset(ad.imagePath) | imagine_filter('medium') }}" alt="">
-                    {{ include('tag/show-all.html.twig', {'ad': ad}) }}
-
-                    <h6 class="card-subtitle mb-2 text-muted">De : {{ ad.user.name }}</h6>
-                    <h6 class="card-subtitle mb-2 text-muted">{{ ad.price }}€
-                        | {{ ad.creationDate | date("m/d/Y") }}</h6>
-                    <p class="card-text">{{ ad.description }}</p>
-                    <hr/>
-                    {% if is_granted('ROLE_USER') %}
-                        <form action="/question/add" method="post">
-                            <textarea placeholder="Votre question" name="questionText" style="width: 100%;"></textarea>
-                            <input type="hidden" name="adSlug" value="{{ ad.slug }}">
-                            <br/>
-
-                            <input type="submit">
-                        </form>
-                    {% else %}
-                        <p>Merci de vous connecter pour poser une question</p>
-                    {% endif %}
-                    <hr/>
-                    <h4>Questions</h4>
-                    <hr/>
-                    {% for question in ad.questions %}
-                        <article class="card" style="padding: 30px 20px;margin-bottom:30px;">
-                            <h4>
-                                <img src="{{ asset(question.usr.imagePath) | imagine_filter('profile_pic') }}" alt="Avatar">
-                                {{ question.usr.name }} :
-                            </h4>
-                            <p>{{ question.text }}</p>
-                            <p style="color: grey;">Postée le : {{ question.createdAt|date('Y-m-d') }}</p>
-                            <section>
-                                {% if is_granted('ROLE_USER') %}
-                                    <form action="/answer/add" method="post">
-                                        <textarea placeholder="Votre réponse" name="answerText"
-                                                  style="width: 100%;"></textarea>
-                                        <input type="hidden" name="adSlug" value="{{ ad.slug }}">
-                                        <input type="hidden" name="questionId" value="{{ question.id }}">
-                                        <br/>
-                                        <input type="submit">
-                                    </form>
-                                {% else %}
-                                    <p>Merci de vous connecter pour répondre</p>
-                                {% endif %}
-                                <h5>Réponses</h5>
-                                <hr/>
-                                <p>Listes des réponses :</p>
-                                {% for answer in question.answers %}
-                                    <article>
-                                        <h6><img src="{{ asset(answer.author.imagePath) | imagine_filter('profile_pic') }}" alt="Avatar">
-                                            {% if answer.author.id is same as (ad.user.id) %}
-                                            <span class="text-danger">L'auteur a répondu :</span>
-                                        </h6>
-                                        {% else %}
-                                            {{ answer.author.name }} a répondu :
-                                        {% endif %}
-                                        <p>{{ answer.text }}</p>
-                                        <p style="color: grey;">Postée le : {{ answer.createdAt|date('Y-m-d') }}</p>
-                                    </article>
-                                    <hr class="text-center" style="width: 50%;"/>
-                                {% endfor %}
-                            </section>
-                        </article>
-                    {% endfor %}
+<div class="container">
+    <div class="row">
+        <div class="card col-xs-12">
+            <div class="card-body">
+                {% if isAuthor %}
+                <div class="text-end">
+                    <a href="{{ path('lbcdp_ad_edit',{'slug':ad.slug}) }}">Modifier</a>
+                    <a href="{{ path('lbcdp_ad_remove',{'slug':ad.slug}) }}">Supprimer</a>
                 </div>
+                {% endif %}
+                <h3 class="card-title font-weight-bold">{{ ad.title }}</h3>
+
+                <img src="{{ asset(ad.imagePath) | imagine_filter('medium') }}" alt="">
+                {{ include('tag/show-all.html.twig', {'ad': ad}) }}
+
+                <h6 class="card-subtitle mb-2 text-muted">De : {{ ad.user.name }}</h6>
+                <h6 class="card-subtitle mb-2 text-muted">{{ ad.price }}€
+                    | {{ ad.creationDate | date("m/d/Y") }}</h6>
+                <p class="card-text">{{ ad.description }}</p>
+                <hr />
+                {% if is_granted('ROLE_USER') %}
+                <form action="/question/add" method="post">
+                    <textarea placeholder="Votre question" name="questionText" style="width: 100%;"></textarea>
+                    <input type="hidden" name="adSlug" value="{{ ad.slug }}">
+                    <br />
+
+                    <input type="submit">
+                </form>
+                {% else %}
+                <p>Merci de vous connecter pour poser une question</p>
+                {% endif %}
+                <hr />
+                <h4>Questions</h4>
+                <hr />
+                {% for question in ad.questions %}
+                <article class="card" style="padding: 30px 20px;margin-bottom:30px;">
+                    <a class="text-decoration-none text-secondary"
+                        href="{{ path('lbcdp_showprofile', { 'email': ad.user.email }) }}">
+                        <h4>
+                            <img src="{{ asset(question.usr.imagePath) | imagine_filter('profile_pic') }}" alt="Avatar">
+                            {{ question.usr.name }} :
+                        </h4>
+                        <a />
+                        <p>{{ question.text }}</p>
+                        <p style="color: grey;">Postée le : {{ question.createdAt|date('Y-m-d') }}</p>
+                        <section>
+                            {% if is_granted('ROLE_USER') %}
+                            <form action="/answer/add" method="post">
+                                <textarea placeholder="Votre réponse" name="answerText" style="width: 100%;"></textarea>
+                                <input type="hidden" name="adSlug" value="{{ ad.slug }}">
+                                <input type="hidden" name="questionId" value="{{ question.id }}">
+                                <br />
+                                <input type="submit">
+                            </form>
+                            {% else %}
+                            <p>Merci de vous connecter pour répondre</p>
+                            {% endif %}
+                            <h5>Réponses</h5>
+                            <hr />
+                            <p>Listes des réponses :</p>
+                            {% for answer in question.answers %}
+                            <article>
+                                <a class="text-decoration-none text-secondary"
+                                    href="{{ path('lbcdp_showprofile', { 'email': ad.user.email }) }}">
+
+                                    <h6><img src="{{ asset(answer.author.imagePath) | imagine_filter('profile_pic') }}"
+                                            alt="Avatar">
+                                </a>
+                                {% if answer.author.id is same as (ad.user.id) %}
+                                <span class="text-danger">L'auteur a répondu :</span>
+                                </h6>
+                                {% else %}
+                                <a class="text-decoration-none text-secondary"
+                                    href="{{ path('lbcdp_showprofile', { 'email': ad.user.email }) }}">
+                                    {{ answer.author.name }}
+                                </a>
+                                a répondu :
+                                {% endif %}
+                                <p>{{ answer.text }}</p>
+                                <p style="color: grey;">Postée le : {{ answer.createdAt|date('Y-m-d') }}</p>
+                            </article>
+                            <hr class="text-center" style="width: 50%;" />
+                            {% endfor %}
+                        </section>
+                </article>
+                {% endfor %}
             </div>
         </div>
     </div>
+</div>
 {% endblock %}
