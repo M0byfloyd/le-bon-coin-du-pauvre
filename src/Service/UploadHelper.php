@@ -5,7 +5,6 @@ namespace App\Service;
 use Gedmo\Sluggable\Util\Urlizer;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UploadHelper
 {
@@ -20,28 +19,46 @@ class UploadHelper
         $this->publicPath = $publicPath;
     }
 
-    public function uploadImg(Array $array, $entityName = '') {
+    public function uploadImg($array, $entityName = '')
+    {
         $destination = $this->publicPath . '/public/uploads/' . $entityName;
 
-        $filenameArray = [];
 
-        foreach ($array as $image) {
-            $originalFilename = $image->getClientOriginalName();
-            $baseFileName = pathinfo($originalFilename,PATHINFO_FILENAME);
+        if (is_array($array)) {
+            $filenameArray = [];
 
-            $filename = Urlizer::urlize($baseFileName) . '-' . uniqid() . '.' . $image->guessExtension();
+            foreach ($array as $image) {
+                $originalFilename = $image->getClientOriginalName();
+                $baseFileName = pathinfo($originalFilename, PATHINFO_FILENAME);
 
-            $image->move($destination,$filename);
-            $filenameArray[] = $filename;
+                $filename = Urlizer::urlize($baseFileName) . '-' . uniqid() . '.' . $image->guessExtension();
+
+                $image->move($destination, $filename);
+                $filenameArray[] = $filename;
+            }
+
+            return implode(',', $filenameArray);
         }
 
+
+        $originalFilename = $array->getClientOriginalName();
+        $baseFileName = pathinfo($originalFilename, PATHINFO_FILENAME);
+
+        $filename = Urlizer::urlize($baseFileName) . '-' . uniqid() . '.' . $array->guessExtension();
+
+        $array->move($destination, $filename);
+        $filenameArray[] = $filename;
+
+
         return implode(',', $filenameArray);
+
     }
 
-    public function fixtureUpload(File $file, $entityName) {
+    public function fixtureUpload(File $file, $entityName)
+    {
         $destination = $this->publicPath . '/public/uploads/' . $entityName;
         $originalFilename = $file->getFilename();
-        $baseFileName = pathinfo($originalFilename,PATHINFO_FILENAME);
+        $baseFileName = pathinfo($originalFilename, PATHINFO_FILENAME);
         $filename = Urlizer::urlize($baseFileName) . '-' . uniqid() . '.' . $file->guessExtension();
 
         $fs = new Filesystem();

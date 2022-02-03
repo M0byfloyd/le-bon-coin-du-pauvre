@@ -258,6 +258,13 @@ class Ad
     }
 
     public function fetchImages(): array {
-        return explode(',', $this->getImages());
+        $images = explode(',', $this->getImages());
+
+        $imageArray = [];
+        foreach ($images as $image) {
+            $imageArray[] = 'uploads/ad/' . $image;
+        }
+
+        return $imageArray;
     }
 }
