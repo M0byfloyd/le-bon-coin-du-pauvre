@@ -1,13 +1,26 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+<div class="container">
+    <div class="row">
+        <div>
+            <p class="text-center mb-3">Voulez-vous réellement supprimer votre pauvre annonce <span>"{{ ad.title }}"</span> ? </p>
+            <form method="POST">
+            <div class="row">
 
-<div>
-    <p>Voulez-vous réellement supprimer votre pauvre annonce <span>"{{ ad.title }}"</span> ? </p>
-    <form method="POST">
-        <button type="submit" name="choice" value="y" >Bien-sûr tu me prends pour quoi ?</button>
-        <button type="submit" name="choice" value="n" >OULALALAH MAIS QU'EST-CE QUE JE FOUS LA</button>
-    </form>
+            <div class="col-xs-6 col-md-6">
+
+                <button type="submit" name="choice" class="btn btn-lg btn-primary text-right w-100" value="y">Bien-sûr tu me prends pour quoi ?</button>
+        </div>
+            <div class="col-xs-6 col-md-6">
+
+                <button type="submit" name="choice" class="btn btn-lg btn-secondary w-100" value="n">OULALALAH MAIS QU'EST-CE QUE JE FOUS LA</button>
+        </div>
+        </div>
+
+            </form>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

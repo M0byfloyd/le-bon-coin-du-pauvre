@@ -1,14 +1,38 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <form method="post">
-        <input name="firstName" placeholder="First name">
-        <input name="lastName" placeholder="Last name">
-        <input type="email" name="email" placeholder="Email">
-        <input type="password" name="password" placeholder="password">
-        <input type="password" name="passwordVerify" placeholder="Verify Password">
+<div class="container">
+    <div class="row">
+        <h1 class="h3 mb-3 font-weight-normal">Inscrivez le pauvre qui est en vous</h1>
+        <form method="post">
+            <div class="col-xs-12 mb-3 ">
+                <label for="firstName">Prénom</label>
+                <input type="text" name="firstName" placeholder="Prénom" class="form-control" required autofocus>
+            </div>
+            <div class="col-xs-12 mb-3 ">
+                <label for="lastName">Nom</label>
+                <input type="text" name="lastName" placeholder="Nom" class="form-control" required autofocus>
+            </div>
+            <div class="col-xs-12 mb-3 ">
 
-        <input type="hidden" name="csrf" value="{{ csrf_token('register_form') }}">
-        <input type="submit">
-    </form>
+                <label for="email">Email</label>
+                <input type="email" name="email" placeholder="Email" class="form-control" required autofocus>
+            </div>
+            <div class="col-xs-12 mb-3 ">
+                <label for="password">Password</label>
+                <input type="password" name="password" placeholder="password" class="form-control" required autofocus>
+            </div>
+            <div class="col-xs-12 mb-3 ">
+                <label for="passwordVerify">Verify Password</label>
+                <input type="password" name="passwordVerify" placeholder="Verify Password" class="form-control" required
+                    autofocus>
+            </div>
+            <div class="col-xs-12 mb-3 ">
+                <input type="hidden" name="csrf" value="{{ csrf_token('register_form') }}">
+                <input type="submit" class="btn btn-lg btn-primary">
+            </div>
+
+        </form>
+    </div>
+</div>
 {% endblock %}
