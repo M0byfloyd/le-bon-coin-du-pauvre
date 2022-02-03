@@ -1,15 +1,16 @@
 {% extends 'base.html.twig' %}
+{% block title %}S'inscrire{% endblock %}
 
 {% block body %}
     {{ form_start(userForm) }}
     <div class="row">
-        <div class="col-6">
+        <div class="col-6 d-flex flex-column mx-auto">
             <div class="row">
                 <div class="col-6">
-                    {{ form_row(userForm.firstName) }}
+                    {{ form_row(userForm.firstName, { 'label': 'Prénom' }) }}
                 </div>
                 <div class="col-6">
-                    {{ form_row(userForm.lastName) }}
+                    {{ form_row(userForm.lastName, { 'label': 'Nom' }) }}
                 </div>
             </div>
             <div class="row">
@@ -30,8 +31,8 @@
                     {{ form_row(userForm.profilePicture) }}
                 </div>
             </div>
+    {{ form_row(userForm.submit, { 'label': 'Envoyer le formulaire' }) }}
         </div>
     </div>
-    {{ form_row(userForm.submit) }}
     {{ form_end(userForm) }}
 {% endblock %}
