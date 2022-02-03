@@ -5,6 +5,8 @@
         <div class="col-3">
             <h1>Votre profil</h1>
 
+            <a href="{{ path('lbcdp_user_edit', {'email': user.email}) }}">Editer mon profil</a>
+
             <img src="{{ asset(user.imagePath) | imagine_filter('medium') }}" alt="Avatar">
             <p>Nom : {{ user.lastname }}</p>
             <p>Prénom : {{ user.firstname }}</p>
@@ -17,17 +19,65 @@
         <h2>
             Vos dernières annonces
         </h2>
+        {% if user.ads|length > 0 %}
+            <ul class="list-group">
+
+                {% for ad in user.ads %}
+                    <li class="list-group-item">
+                        Voir
+                        <a href="{{ path('lbcdp_ad_show', {'slug': ad.slug}) }}">
+                            {{ ad.title }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+
+        {% else %}
+            <p>Ah, vous allez pas gagner de l'argent sans annonces </p>
+        {% endif %}
     </div>
     <div class="row">
         <div class="col-6">
             <h2>
                 Vos dernières questions
             </h2>
+            {% if user.questions|length > 0 %}
+                <ul class="list-group">
+
+                    {% for question in user.questions %}
+                        <li class="list-group-item">
+                            Sur l'annonce :
+                            <a href="{{ path('lbcdp_ad_show', {'slug': question.ad.slug}) }}">
+                                {{ question.ad.title }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+            {% else %}
+                <p>Faudrait participer un peu plus</p>
+            {% endif %}
         </div>
         <div class="col-6">
             <h2>
                 Vos dernières réponse
             </h2>
+            {% if user.answers|length > 0 %}
+                <ul class="list-group">
+
+                    {% for answer in user.answers %}
+                        <li class="list-group-item">
+                            Sur l'annonce :
+                            <a href="{{ path('lbcdp_ad_show', {'slug': answer.question.ad.slug}) }}">
+                                {{ answer.question.ad.title }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+            {% else %}
+                <p>Faudrait participer un peu plus</p>
+            {% endif %}
         </div>
     </div>
 

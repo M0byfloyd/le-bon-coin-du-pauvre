@@ -18,19 +18,6 @@ use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 class UserController extends AbstractController
 {
     /**
-     * @Route("/users", name="user_index")
-     */
-    public function index(UserRepository $userRepository): Response
-    {
-
-        dd($userRepository->findAll());
-        return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController',
-            'users' => $userRepository->findAll(),
-        ]);
-    }
-
-    /**
      * @Route("/signin", name="lbcdp_signin")
      */
     public function new(Request                     $request,
@@ -92,6 +79,10 @@ class UserController extends AbstractController
      */
     public function showProfile(User $user): Response
     {
+        if ($user === $this->getUser()) {
+            return $this->redirectToRoute('lbcdp_user_me');
+        }
+
         return $this->render('user/profile.html.twig', ['user' => $user]);
     }
 
@@ -112,5 +103,54 @@ class UserController extends AbstractController
         $entityManager->flush();
 
         return $this->json(['votesTotal' => $user->getVotes()]);
+    }
+
+    /**
+     * @param User $user
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @param UploadHelper $uploadHelper
+     * @return Response
+     * @Route ("/user/{email}/edit", name="lbcdp_user_edit")
+     */
+    public function editProfile(
+        User $user,
+        Request $request,
+        EntityManagerInterface $entityManager,
+        UploadHelper $uploadHelper
+    ): Response
+    {
+        $this->denyAccessUnlessGranted('USER_VIEW', $this->getUser());
+
+        $form = $this->createForm(UserType::class, $user);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            /**
+             * @var $user User
+             */
+
+            $user = $form->getData();
+            $newFile = $form['profilePicture']->getData();
+
+            if ($newFile) {
+                $fileName = $uploadHelper->uploadImg($newFile, 'user');
+                $user->setProfilePicture($fileName);
+            }
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $successMessages = [
+                'Waouh. Bravo. Génial.',
+                'Ah super, je croyais que tu t\'appelais Romuald'
+            ];
+
+            $this->addFlash('success', $successMessages[array_rand($successMessages)]);
+
+            return $this->redirectToRoute('lbcdp_user_me');
+        }
+
+        return $this->render('user/edit.html.twig', ['userForm' => $form->createView()]);
     }
 }

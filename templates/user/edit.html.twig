@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ form_start(userForm) }}
+    <div class="row">
+        <div class="col-6">
+            <div class="row">
+                <div class="col-6">
+                    {{ form_row(userForm.firstName) }}
+                </div>
+                <div class="col-6">
+                    {{ form_row(userForm.lastName) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    {{ form_row(userForm.email) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    {{ form_row(userForm.password.first) }}
+                </div>
+                <div class="col-6">
+                    {{ form_row(userForm.password.second) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    {{ form_row(userForm.profilePicture) }}
+                </div>
+            </div>
+        </div>
+    </div>
+    {{ form_row(userForm.submit) }}
+    {{ form_end(userForm) }}
+{% endblock %}
