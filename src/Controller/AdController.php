@@ -142,8 +142,6 @@ class AdController extends AbstractController
              */
 
             $ad = $form->getData();
-            $ad->setUser($this->getUser())
-                ->setCreationDate(new \DateTime('now'));
 
             $newFile = $form['images']->getData();
 
