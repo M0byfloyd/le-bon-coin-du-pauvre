@@ -332,6 +332,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getImagePath(): string
     {
-        return $this->getProfilePicture() === null ? UploadHelper::DEFAULT_IMAGE : UploadHelper::BASE_PATH . 'user/' . $this->getProfilePicture();
+        return $this->getProfilePicture() === null ? UploadHelper::DEFAULT_PROFILE_IMAGE : UploadHelper::BASE_PATH . 'user/' . $this->getProfilePicture();
     }
 }

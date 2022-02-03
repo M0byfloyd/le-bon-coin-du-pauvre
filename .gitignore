@@ -11,7 +11,8 @@
 .idea/deployment.xml
 
 ###> liip/imagine-bundle ###
-/public/media/cache/
+/public/media/*
+/public/media/
 ###< liip/imagine-bundle ###
 /public/uploads/ad/*
 /public/uploads/user/*
