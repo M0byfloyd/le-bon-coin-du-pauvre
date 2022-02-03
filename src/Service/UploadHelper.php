@@ -20,17 +20,22 @@ class UploadHelper
         $this->publicPath = $publicPath;
     }
 
-    public function uploadImg(UploadedFile $uploadedFile, $entityName = '') {
+    public function uploadImg(Array $array, $entityName = '') {
         $destination = $this->publicPath . '/public/uploads/' . $entityName;
 
-        $originalFilename = $uploadedFile->getClientOriginalName();
-        $baseFileName = pathinfo($originalFilename,PATHINFO_FILENAME);
+        $filenameArray = [];
 
-        $filename = Urlizer::urlize($baseFileName) . '-' . uniqid() . '.' . $uploadedFile->guessExtension();
+        foreach ($array as $image) {
+            $originalFilename = $image->getClientOriginalName();
+            $baseFileName = pathinfo($originalFilename,PATHINFO_FILENAME);
 
-        $uploadedFile->move($destination,$filename);
+            $filename = Urlizer::urlize($baseFileName) . '-' . uniqid() . '.' . $image->guessExtension();
 
-        return $filename;
+            $image->move($destination,$filename);
+            $filenameArray[] = $filename;
+        }
+
+        return implode(',', $filenameArray);
     }
 
     public function fixtureUpload(File $file, $entityName) {

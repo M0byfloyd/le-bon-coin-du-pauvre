@@ -4,7 +4,9 @@
             <div class="card-body">
                 <article>
                     <div class="col-12">
-                        <img src="{{ asset(ad.imagePath) | imagine_filter('thumbnail') }}" alt="">
+                        {% for image in ad.fetchImages %}
+                            <img src="{{ asset(image) | imagine_filter('thumbnail') }}" alt="">
+                        {% endfor %}
                     </div>
                     <div class="col-12">
                         <h5 class="card-title">{{ ad.title }}</h5>

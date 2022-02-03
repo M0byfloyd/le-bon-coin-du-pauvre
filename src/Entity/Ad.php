@@ -256,4 +256,8 @@ class Ad
     {
         return $this->getImages() === null ? UploadHelper::DEFAULT_IMAGE : UploadHelper::BASE_PATH . '/ad/' . $this->getImages();
     }
+
+    public function fetchImages(): array {
+        return explode(',', $this->getImages());
+    }
 }

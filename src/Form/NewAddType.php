@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\All;
 use Symfony\Component\Validator\Constraints\Image;
 
 class NewAddType extends AbstractType
@@ -23,10 +24,18 @@ class NewAddType extends AbstractType
             ->add('images',FileType::class, [
                 'mapped'=>false,
                 'required'=>false,
+                'multiple'=>true,
                 'constraints'=> [
-                    new Image([
-                        'maxSize' => '2M',
-                        'maxSizeMessage' => 'Je sais que t\'es pauvre mais y a des compresseur gratuits !'
+                    new All([
+                        new Image([
+                            'maxSize' => '2M',
+                            'maxSizeMessage' => 'Je sais que t\'es pauvre mais y a des compresseur gratuits !',
+                            'mimeTypes' => [
+                                'image/jpeg',
+                                'image/png',
+                            ],
+                            'mimeTypesMessage' => 'Bah c\'est pas une image ça, sale pauvre',
+                        ])
                     ])
                 ]
             ])
