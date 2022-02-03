@@ -39,7 +39,10 @@
                     <hr/>
                     {% for question in ad.questions %}
                         <article class="card" style="padding: 30px 20px;margin-bottom:30px;">
-                            <h4>Question de {{ question.usr.name }} : </h4>
+                            <h4>
+                                <img src="{{ asset(question.usr.imagePath) | imagine_filter('profile_pic') }}" alt="Avatar">
+                                {{ question.usr.name }} :
+                            </h4>
                             <p>{{ question.text }}</p>
                             <p style="color: grey;">Postée le : {{ question.createdAt|date('Y-m-d') }}</p>
                             <section>
@@ -60,7 +63,13 @@
                                 <p>Listes des réponses :</p>
                                 {% for answer in question.answers %}
                                     <article>
-                                        <h6>{{ answer.author.name }} a répondu :</h6>
+                                        <h6><img src="{{ asset(answer.author.imagePath) | imagine_filter('profile_pic') }}" alt="Avatar">
+                                            {% if answer.author.id is same as (ad.user.id) %}
+                                            <span class="text-danger">L'auteur a répondu :</span>
+                                        </h6>
+                                        {% else %}
+                                            {{ answer.author.name }} a répondu :
+                                        {% endif %}
                                         <p>{{ answer.text }}</p>
                                         <p style="color: grey;">Postée le : {{ answer.createdAt|date('Y-m-d') }}</p>
                                     </article>
