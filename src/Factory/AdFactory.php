@@ -4,6 +4,8 @@ namespace App\Factory;
 
 use App\Entity\Ad;
 use App\Repository\AdRepository;
+use App\Service\UploadHelper;
+use Symfony\Component\HttpFoundation\File\File;
 use Zenstruck\Foundry\RepositoryProxy;
 use Zenstruck\Foundry\ModelFactory;
 use Zenstruck\Foundry\Proxy;
@@ -28,11 +30,23 @@ use Zenstruck\Foundry\Proxy;
  */
 final class AdFactory extends ModelFactory
 {
-    public function __construct()
+    private static $randomImage =[
+        'ad_0.jpg',
+        'ad_1.jpg',
+        'ad_2.png',
+        'ad_3.jpg',
+        'ad_4.jpg',
+        'ad_5.jpg',
+        'ad_6.jpg',
+    ];
+
+    private UploadHelper $uploadHelper;
+
+    public function __construct(UploadHelper $uploadHelper)
     {
         parent::__construct();
 
-        // TODO inject services if required (https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#factories-as-services)
+        $this->uploadHelper = $uploadHelper;
     }
 
     protected function getDefaults(): array
@@ -43,6 +57,9 @@ final class AdFactory extends ModelFactory
             'price'=> rand(0,1000),
             'votes'=> rand(-500,500),
             'creationDate'=> self::faker()->dateTime(),
+            'images'=> $this->uploadHelper->fixtureUpload(
+                new File(__DIR__ . '/images/ad/' . self::faker()->randomElement(self::$randomImage)), 'ad'
+            )
         ];
     }
 

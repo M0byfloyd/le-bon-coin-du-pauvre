@@ -44,7 +44,7 @@ final class UserFactory extends ModelFactory
         'profile_8.jpg',
     ];
     private $hasher;
-    private $uploadhelper;
+    private UploadHelper $uploadHelper;
 
     public function __construct(UserPasswordHasherInterface $hasher, UploadHelper $uploadHelper)
     {
